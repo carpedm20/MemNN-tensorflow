@@ -96,8 +96,9 @@ class MemN2N(object):
 
         self.W = tf.Variable(tf.random_normal([self.edim, self.nwords], stddev=self.init_std))
         z = tf.matmul(self.hid[-1], self.W)
-
-        self.loss = tf.nn.softmax_cross_entropy_with_logits(z, self.target)
+        log_pz = tf.log(tf.nn.softmax(z))
+        
+        self.loss = tf.nn.softmax_cross_entropy_with_logits(log_pz, self.target)
 
         self.lr = tf.Variable(self.current_lr)
         self.opt = tf.train.GradientDescentOptimizer(self.lr)
